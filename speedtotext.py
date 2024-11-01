@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import speech_recognition as sr
+from pydub import AudioSegment
 from docx import Document
 
 # Thiết lập thư mục tải lên
@@ -40,6 +41,13 @@ if uploaded_file is not None:
     audio_path = os.path.join(UPLOAD_FOLDER, uploaded_file.name)
     with open(audio_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
+
+    # Chuyển đổi file MP3 sang WAV nếu cần
+    if uploaded_file.type == "audio/mpeg":
+        wav_audio_path = os.path.join(UPLOAD_FOLDER, uploaded_file.name.replace(".mp3", ".wav"))
+        audio_segment = AudioSegment.from_mp3(audio_path)
+        audio_segment.export(wav_audio_path, format="wav")
+        audio_path = wav_audio_path  # Cập nhật đường dẫn đến file WAV
 
     # Chuyển đổi âm thanh sang văn bản
     text = convert_audio_to_text(audio_path)
