@@ -3,3 +3,4 @@ speechrecognition
 pydub
 librosa
 soundfile
+python-docx
