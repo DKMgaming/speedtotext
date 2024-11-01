@@ -1,8 +1,9 @@
 import os
 import streamlit as st
 import speech_recognition as sr
-from pydub import AudioSegment
 from docx import Document
+import librosa
+import soundfile as sf
 
 # Thiết lập thư mục tải lên
 UPLOAD_FOLDER = 'uploads'
@@ -45,8 +46,9 @@ if uploaded_file is not None:
     # Chuyển đổi file MP3 sang WAV nếu cần
     if uploaded_file.type == "audio/mpeg":
         wav_audio_path = os.path.join(UPLOAD_FOLDER, uploaded_file.name.replace(".mp3", ".wav"))
-        audio_segment = AudioSegment.from_mp3(audio_path)
-        audio_segment.export(wav_audio_path, format="wav")
+        # Sử dụng librosa để chuyển đổi MP3 sang WAV
+        audio_data, sr = librosa.load(audio_path, sr=None)  # Đọc file âm thanh
+        sf.write(wav_audio_path, audio_data, sr)  # Lưu thành file WAV
         audio_path = wav_audio_path  # Cập nhật đường dẫn đến file WAV
 
     # Chuyển đổi âm thanh sang văn bản
