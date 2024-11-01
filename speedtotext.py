@@ -12,8 +12,8 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 # Hàm chuyển đổi âm thanh sang văn bản
 def convert_audio_to_text(audio_path):
+    recognizer = sr.Recognizer()
     try:
-        recognizer = sr.Recognizer()
         with sr.AudioFile(audio_path) as source:
             audio = recognizer.record(source)
         text = recognizer.recognize_google(audio, language='vi-VN')
