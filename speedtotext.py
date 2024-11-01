@@ -16,17 +16,15 @@ def convert_audio_to_text(audio_path):
     # Đọc file âm thanh và chia thành các đoạn nhỏ
     try:
         with sr.AudioFile(audio_path) as source:
-            audio = recognizer.record(source)  # Đọc toàn bộ file âm thanh
             duration = source.DURATION
             
             # Chia thành các đoạn nhỏ (ví dụ: 10 giây)
             for start in range(0, int(duration), 10):
                 end = min(start + 10, int(duration))
-                source.seek(start)  # Di chuyển đến thời gian bắt đầu
-                audio_segment = recognizer.record(source, duration=end - start)  # Ghi âm đoạn nhỏ
+                source_audio = recognizer.record(source, duration=end - start)  # Ghi âm đoạn nhỏ
                 
                 try:
-                    segment_text = recognizer.recognize_google(audio_segment, language='vi-VN')
+                    segment_text = recognizer.recognize_google(source_audio, language='vi-VN')
                     text += segment_text + " "
                 except sr.UnknownValueError:
                     text += "[Không thể nhận diện] "
