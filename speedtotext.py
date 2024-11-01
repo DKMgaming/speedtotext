@@ -12,18 +12,17 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 # Hàm chuyển đổi âm thanh sang văn bản
 def convert_audio_to_text(audio_path):
+    recognizer = sr.Recognizer()  # Khởi tạo đối tượng Recognizer
     try:
-        recognizer = sr.Recognizer()  # Khởi tạo đối tượng Recognizer ở đây
         with sr.AudioFile(audio_path) as source:
             audio = recognizer.record(source)
         text = recognizer.recognize_google(audio, language='vi-VN')
     except sr.UnknownValueError:
-        text = "Không thể nhận diện được giọng nói"
+        return "Không thể nhận diện được giọng nói"
     except sr.RequestError as e:
-        text = f"Lỗi khi yêu cầu dịch vụ nhận diện giọng nói: {e}"
+        return f"Lỗi khi yêu cầu dịch vụ nhận diện giọng nói: {e}"
     except Exception as e:
-        text = f"Đã xảy ra lỗi: {e}"
-    return text
+        return f"Đã xảy ra lỗi: {e}"
 
 # Hàm tạo tài liệu Word từ văn bản
 def create_word_document(text, output_path):
