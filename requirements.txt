@@ -1,5 +1,5 @@
-SpeechRecognition
-python-docx
+streamlit
+speechrecognition
 pydub
 librosa
-
+soundfile
