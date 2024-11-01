@@ -12,13 +12,14 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 # Hàm chuyển đổi âm thanh sang văn bản
 def convert_audio_to_text(audio_path):
-    recognizer = sr.Recognizer()  # Khởi tạo đối tượng Recognizer
     try:
+        recognizer = sr.Recognizer()  # Khởi tạo đối tượng Recognizer
         with sr.AudioFile(audio_path) as source:
             audio = recognizer.record(source)
         text = recognizer.recognize_google(audio, language='vi-VN')
+        return text
     except sr.UnknownValueError:
-        return "Không thể nhận diện được giọng nói"
+        return "Không thể nhận diện được giọng nói."
     except sr.RequestError as e:
         return f"Lỗi khi yêu cầu dịch vụ nhận diện giọng nói: {e}"
     except Exception as e:
@@ -47,8 +48,8 @@ if uploaded_file is not None:
     # Chuyển đổi file MP3 sang WAV nếu cần
     if uploaded_file.type == "audio/mpeg":
         wav_audio_path = os.path.join(UPLOAD_FOLDER, uploaded_file.name.replace(".mp3", ".wav"))
-        audio_data, sr = librosa.load(audio_path, sr=None)  # Đọc file âm thanh
-        sf.write(wav_audio_path, audio_data, sr)  # Lưu thành file WAV
+        audio_data, sr_rate = librosa.load(audio_path, sr=None)  # Đọc file âm thanh
+        sf.write(wav_audio_path, audio_data, sr_rate)  # Lưu thành file WAV
         audio_path = wav_audio_path  # Cập nhật đường dẫn đến file WAV
 
     # Chuyển đổi âm thanh sang văn bản
